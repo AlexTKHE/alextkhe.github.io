@@ -41,6 +41,6 @@ export default class TitleBar {
 
         this.ctx.fillText(scorePadded, scoreX, y);
         this.ctx.fillText(`High: ${highScorePadded}`, highScoreX, y);
-        this.ctx.fillText("Tyler's Adventure", titleX, y);
+        this.ctx.fillText("Tyler Run", titleX, y);
     }
 }
