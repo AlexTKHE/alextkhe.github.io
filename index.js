@@ -1,6 +1,6 @@
 import Player from './Player.js';
 import Ground from './Ground.js';
-import CactiController from './CactiController.js';
+import ObjectController from './ObjectController.js';
 import TitleBar from './TitleBar.js';
 
 const canvas = document.getElementById("game");
@@ -18,18 +18,30 @@ const MAX_JUMP_HEIGHT = GAME_HEIGHT;
 const MIN_JUMP_HEIGHT = 150;
 const GROUND_WIDTH = 2400;
 const GROUND_HEIGHT = 24;
-const GROUND_AND_CACTUS_SPEED = 0.5;
+const GROUND_AND_OBJECT_SPEED = 0.5;
+const HATSIZE = 50;
 
-const CACTI_CONFIG = [
+const OBJECT_CONFIG = [
     { width: 378 / 12, height: 1200 / 12 , image: "images/fanObstickle.png" },
     { width: 1809 / 50, height: 4032 / 50, image: "images/dairyConeObstickle.png" }, 
     { width: 600 / 5, height: 374 / 5, image: "images/computerObstickle.png" },
     { width: 1100 / 30 , height: 3578 / 30 , image: "images/surfBoardObstickle.png"}
 ];
+
+const BACKGROUND_OBJECT_CONFIG = [
+    { width : 3311 / HATSIZE, height: 2848 / HATSIZE, image: "images/tylerHat0.png"},
+    { width : 3311 / HATSIZE, height: 2848 / HATSIZE, image: "images/tylerHat1.png"},
+    { width : 3311 / HATSIZE, height: 2848 / HATSIZE, image: "images/tylerHat2.png"},
+    { width : 3311 / HATSIZE, height: 2848 / HATSIZE, image: "images/tylerHat3.png"},
+    { width : 3311 / HATSIZE, height: 2848 / HATSIZE, image: "images/tylerHat4.png"},
+    { width : 3311 / HATSIZE, height: 2848 / HATSIZE, image: "images/tylerHat5.png"},
+    { width : 3311 / HATSIZE, height: 2848 / HATSIZE, image: "images/tylerHat6.png"},
+    { width : 3311 / HATSIZE, height: 2848 / HATSIZE, image: "images/tylerHat7.png"},
+]
 // Game Objects 
 let player = null;
 let ground = null;
-let cactiController = null;
+let objectController = null;
 let score = null;
 
 let scaleRatio = null;
@@ -51,19 +63,29 @@ function createSprites() {
 
     player = new Player(ctx, playerWidthInGame, playerHeightInGame, minJumpHeightInGame, maxJumpHeightInGame, scaleRatio);
 
-    ground = new Ground(ctx, groundWidthInGame, groundHeightInGame, GROUND_AND_CACTUS_SPEED, scaleRatio);
+    ground = new Ground(ctx, groundWidthInGame, groundHeightInGame, GROUND_AND_OBJECT_SPEED, scaleRatio);
 
-    const cactiImages = CACTI_CONFIG.map(cactus => {
+    const objectImages = OBJECT_CONFIG.map(object => {
         const image = new Image();
-        image.src = cactus.image;
+        image.src = object.image;
         return {
             image: image,
-            width: cactus.width * scaleRatio,
-            height: cactus.height * scaleRatio,
+            width: object.width * scaleRatio,
+            height: object.height * scaleRatio,
         }
     });
 
-    cactiController = new CactiController(ctx, cactiImages, scaleRatio, GROUND_AND_CACTUS_SPEED);
+    const backgroundObjectImages = BACKGROUND_OBJECT_CONFIG.map(object => {
+        const image = new Image();
+        image.src = object.image;
+        return {
+            image: image,
+            width: object.width * scaleRatio,
+            height: object.height * scaleRatio
+        }
+    });
+
+    objectController = new ObjectController(ctx, objectImages, backgroundObjectImages, scaleRatio, GROUND_AND_OBJECT_SPEED);
 
     score = new TitleBar(ctx, scaleRatio);
 }
@@ -133,7 +155,7 @@ function reset() {
     gameOver = false;
     waitingToStart = false;
     ground.reset();
-    cactiController.reset();
+    objectController.reset();
     score.reset();
     gameSpeed = GAME_SPEED_START;
 }
@@ -173,13 +195,13 @@ function gameLoop(currentTime) {
     if (!gameOver && !waitingToStart) {
         // update game objects
         ground.update(gameSpeed, frameTimeDelta);
-        cactiController.update(gameSpeed, frameTimeDelta);
+        objectController.update(gameSpeed, frameTimeDelta);
         player.update(gameSpeed, frameTimeDelta);
         score.update(frameTimeDelta);
         updateGameSpeed(frameTimeDelta);
     }
 
-    if (!gameOver && cactiController.collideWith(player)) {
+    if (!gameOver && objectController.collideWith(player)) {
         gameOver = true;
         score.setHighScore();
         setupGameReset();
@@ -188,7 +210,7 @@ function gameLoop(currentTime) {
     // draw game objects
 
     ground.draw();
-    cactiController.draw();
+    objectController.draw();
     player.draw();
     score.draw();
 

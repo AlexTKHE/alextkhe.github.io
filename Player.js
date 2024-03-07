@@ -95,7 +95,7 @@ export default class Player {
 
     run(gameSpeed, frameTimeDelta) {
         if (this.walkAnimationTimer <= 0) {
-            console.log(this.count);
+           
             this.image =this.dinoRunImages[this.count];
             if (this.count == 0) {
                 this.decreasing = false;

@@ -1,11 +1,11 @@
-export default class Cactus {
-    constructor(ctx, x, y, width, height, image) {
+export default class Object {
+    constructor(ctx, x, y, width, height, currentImage) {
         this.ctx = ctx;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.image = image;
+        this.currentImage = currentImage;
     }
 
     update(speed, gameSpeed, frameTimeDelta, scaleRatio) {
@@ -13,9 +13,13 @@ export default class Cactus {
     }
     
     draw() {
-        this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        this.ctx.drawImage(this.currentImage, this.x, this.y, this.width, this.height);
     }
 
+    drawBackground(index) {
+        this.image = this.currentImage[index].image
+        this.ctx.drawImage(this.image , this.x, this.y, this.width, this.height);
+    }
     collideWith(sprite) {
         const adjustBy = 2;
         if (
