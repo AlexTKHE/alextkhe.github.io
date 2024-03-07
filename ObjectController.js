@@ -38,7 +38,7 @@ export default class ObjectController {
     }
 
     setNextBackgroundObjectTime() {
-        this.nextBackgroundObjectInterval = 500;
+        this.nextBackgroundObjectInterval = 500 ;
     }
 
     getRandomNumber(min, max) {
@@ -55,7 +55,8 @@ export default class ObjectController {
             y,
             objectImage.width,
             objectImage.height,
-            objectImage.image);
+            objectImage.image,
+            objectImage.isBall);
 
         this.objects.push(object);
     }
@@ -117,8 +118,8 @@ export default class ObjectController {
         this.backgroundObjects.forEach((backgroundObject) => backgroundObject.drawBackground(this.hatIndex));
     }
 
-    collideWith(sprite) {
-        return this.objects.some((object) => object.collideWith(sprite));
+    collideWith(sprite, gameSpeed, frameTimeDelta) {
+        return this.objects.some((object) => object.collideWith(sprite, this.speed, gameSpeed, frameTimeDelta, this.scaleRatio));
     }
 
     reset() {

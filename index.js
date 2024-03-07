@@ -25,7 +25,8 @@ const OBJECT_CONFIG = [
     { width: 378 / 12, height: 1200 / 12 , image: "images/fanObstickle.png" },
     { width: 1809 / 50, height: 4032 / 50, image: "images/dairyConeObstickle.png" }, 
     { width: 600 / 5, height: 374 / 5, image: "images/computerObstickle.png" },
-    { width: 1100 / 30 , height: 3578 / 30 , image: "images/surfBoardObstickle.png"}
+    { width: 1100 / 30 , height: 3578 / 30 , image: "images/surfBoardObstickle.png"},
+    { width: 1211 / 40, height: 1180 /40, image: "images/soccerBall.png" }
 ];
 
 const BACKGROUND_OBJECT_CONFIG = [
@@ -68,10 +69,12 @@ function createSprites() {
     const objectImages = OBJECT_CONFIG.map(object => {
         const image = new Image();
         image.src = object.image;
+        const isBall = object.image === "images/soccerBall.png"; 
         return {
             image: image,
             width: object.width * scaleRatio,
             height: object.height * scaleRatio,
+            isBall : isBall
         }
     });
 
@@ -81,7 +84,8 @@ function createSprites() {
         return {
             image: image,
             width: object.width * scaleRatio,
-            height: object.height * scaleRatio
+            height: object.height * scaleRatio,
+            isBall: false
         }
     });
 
@@ -201,7 +205,7 @@ function gameLoop(currentTime) {
         updateGameSpeed(frameTimeDelta);
     }
 
-    if (!gameOver && objectController.collideWith(player)) {
+    if (!gameOver && objectController.collideWith(player, gameSpeed, frameTimeDelta)) {
         gameOver = true;
         score.setHighScore();
         setupGameReset();
