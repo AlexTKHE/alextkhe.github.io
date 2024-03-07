@@ -56,7 +56,8 @@ export default class ObjectController {
             objectImage.width,
             objectImage.height,
             objectImage.image,
-            objectImage.isBall);
+            objectImage.isBall,
+            objectImage.isSurfBoard);
 
         this.objects.push(object);
     }

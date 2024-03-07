@@ -1,5 +1,5 @@
 export default class Object {
-    constructor(ctx, x, y, width, height, currentImage, isBall) {
+    constructor(ctx, x, y, width, height, currentImage, isBall, isSurfBoard) {
         this.ctx = ctx;
         this.x = x;
         this.y = y;
@@ -7,6 +7,7 @@ export default class Object {
         this.height = height;
         this.currentImage = currentImage;
         this.isBall = isBall;
+        this.isSurfBoard = isSurfBoard;
     }
 
     ballKicked = false;
@@ -34,8 +35,8 @@ export default class Object {
         this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
     collideWith(sprite) {
-        if (!this.isBall) {
-            const adjustBy = 2;
+        if (!this.isBall && !this.isSurfBoard) {
+            const adjustBy = 1.5;
             if (
                 sprite.x < this.x + this.width / adjustBy &&
                 sprite.x + sprite.width / adjustBy > this.x &&
@@ -47,7 +48,20 @@ export default class Object {
                 return false;
             }
         }
-        if (this.isBall) {
+        else if (this.isSurfBoard) {
+            const adjustBy = 2.2 ;
+            if (
+                sprite.x < this.x + this.width / adjustBy &&
+                sprite.x + sprite.width / adjustBy > this.x &&
+                sprite.y < this.y + this.height / adjustBy &&
+                sprite.height + sprite.y / adjustBy > this.y
+            ) {
+                return true;
+            } else {
+                return false;
+            } 
+        }
+        else if (this.isBall) {
             const adjustBy = 1;
             if (
                 sprite.x < this.x + this.width / adjustBy &&

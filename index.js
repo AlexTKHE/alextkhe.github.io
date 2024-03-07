@@ -70,11 +70,13 @@ function createSprites() {
         const image = new Image();
         image.src = object.image;
         const isBall = object.image === "images/soccerBall.png"; 
+        const isSurfBoard = object.image === "images/surfBoardObstickle.png";
         return {
             image: image,
             width: object.width * scaleRatio,
             height: object.height * scaleRatio,
-            isBall : isBall
+            isBall : isBall,
+            isSurfBoard : isSurfBoard
         }
     });
 
@@ -85,7 +87,8 @@ function createSprites() {
             image: image,
             width: object.width * scaleRatio,
             height: object.height * scaleRatio,
-            isBall: false
+            isBall: false,
+            isSurfBoard: false
         }
     });
 
