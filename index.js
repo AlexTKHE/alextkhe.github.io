@@ -205,7 +205,7 @@ function gameLoop(currentTime) {
         updateGameSpeed(frameTimeDelta);
     }
 
-    if (!gameOver && objectController.collideWith(player, gameSpeed, frameTimeDelta)) {
+    if (!gameOver && objectController.collideWith(player)) {
         gameOver = true;
         score.setHighScore();
         setupGameReset();

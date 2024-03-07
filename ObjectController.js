@@ -76,6 +76,7 @@ export default class ObjectController {
         this.backgroundObjects.push(object);
     }
     update(gameSpeed, frameTimeDelta) {
+        
         if (this.nextRotationTime <= 0) {
             if(this.hatIndex == 7) {
                 this.hatIndex = 0;
@@ -107,19 +108,20 @@ export default class ObjectController {
             backgroundObject.update(this.speed, gameSpeed, frameTimeDelta, this.scaleRatio);
         });
 
-        this.objects = this.objects.filter((objects) => objects.x > -objects.width);
+        this.objects = this.objects.filter((objects) => objects.x > -objects.width && objects.y <  this.canvas.height  );
         this.backgroundObjects = this.backgroundObjects.filter((backgroundObjects) => backgroundObjects.x > -backgroundObjects.width);
 
 
     }
 
     draw() {
+        console.log(this.objects.length);
         this.objects.forEach((object) => object.draw());
         this.backgroundObjects.forEach((backgroundObject) => backgroundObject.drawBackground(this.hatIndex));
     }
 
-    collideWith(sprite, gameSpeed, frameTimeDelta) {
-        return this.objects.some((object) => object.collideWith(sprite, this.speed, gameSpeed, frameTimeDelta, this.scaleRatio));
+    collideWith(sprite) {
+        return this.objects.some((object) => object.collideWith(sprite));
     }
 
     reset() {

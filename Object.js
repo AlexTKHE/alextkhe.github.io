@@ -9,13 +9,21 @@ export default class Object {
         this.isBall = isBall;
     }
 
+    ballKicked = false;
+    timeKicked = 1.5   ;
+
     update(speed, gameSpeed, frameTimeDelta, scaleRatio) {
-        this.x -= speed * gameSpeed * frameTimeDelta * scaleRatio;
+        if (!this.ballKicked) {
+            this.x -= speed * gameSpeed * frameTimeDelta * scaleRatio;
+        }
+        else {
+            this.timeKicked -= frameTimeDelta * 0.003
+            this.x += 2* speed * gameSpeed * frameTimeDelta * scaleRatio;
+            this.y -= this.timeKicked  *  speed * gameSpeed * frameTimeDelta * scaleRatio; 
+        }
     }
 
-    kickBall(speed, gameSpeed, frameTimeDelta, scaleRatio) {
-        this.x += 2*speed * gameSpeed * frameTimeDelta * scaleRatio;
-    }
+
 
     draw() {
         this.ctx.drawImage(this.currentImage, this.x, this.y, this.width, this.height);
@@ -25,7 +33,7 @@ export default class Object {
         this.image = this.currentImage[index].image
         this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
-    collideWith(sprite, speed, gameSpeed, frameTimeDelta, scaleRatio) {
+    collideWith(sprite) {
         if (!this.isBall) {
             const adjustBy = 2;
             if (
@@ -47,7 +55,7 @@ export default class Object {
                 sprite.y < this.y + this.height / adjustBy &&
                 sprite.height + sprite.y / adjustBy > this.y
             ) {
-               this.kickBall(speed, gameSpeed, frameTimeDelta, scaleRatio);
+                this.ballKicked = true;
             }
         }
     }
